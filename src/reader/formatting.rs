@@ -42,26 +42,23 @@ impl ArrayFormatter for RustFormatter {
     }
 }
 
+#[derive(Default)]
 pub enum OutputSyntax {
-    Raw(RawFormatter),
-    Cpp(CppFormatter),
-    C(CFormatter),
-    Rust(RustFormatter),
+    #[default]
+    Raw,
+    Cpp,
+    C,
+    Rust,
 }
 
-impl Default for OutputSyntax {
-    fn default() -> Self {
-        OutputSyntax::Raw(RawFormatter)
-    }
-}
 
 impl OutputSyntax {
     pub fn from_string(target: &String) -> Self {
         match target.to_lowercase().as_str() {
-            "cpp" | "c++" | "cxx" => OutputSyntax::Cpp(CppFormatter),
-            "c" => OutputSyntax::C(CFormatter),
-            "rust" => OutputSyntax::Rust(RustFormatter),
-            _ => OutputSyntax::Raw(RawFormatter),
+            "cpp" | "c++" | "cxx" => OutputSyntax::Cpp,
+            "c" => OutputSyntax::C,
+            "rust" => OutputSyntax::Rust,
+            _ => OutputSyntax::Raw,
         }
     }
 }
@@ -69,10 +66,10 @@ impl OutputSyntax {
 impl std::fmt::Display for OutputSyntax {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Raw(_) => write!(f, "Raw"),
-            Self::Rust(_) => write!(f, "Rust"),
-            Self::Cpp(_) => write!(f, "Cpp"),
-            Self::C(_) => write!(f, "C"),
+            Self::Raw => write!(f, "Raw"),
+            Self::Rust => write!(f, "Rust"),
+            Self::Cpp => write!(f, "Cpp"),
+            Self::C => write!(f, "C"),
         }
     }
 }
@@ -80,10 +77,10 @@ impl std::fmt::Display for OutputSyntax {
 impl std::fmt::Debug for OutputSyntax {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Raw(_) => write!(f, "Raw"),
-            Self::Rust(_) => write!(f, "Rust"),
-            Self::Cpp(_) => write!(f, "Cpp"),
-            Self::C(_) => write!(f, "C"),
+            Self::Raw => write!(f, "Raw"),
+            Self::Rust => write!(f, "Rust"),
+            Self::Cpp => write!(f, "Cpp"),
+            Self::C => write!(f, "C"),
         }
     }
 }
@@ -104,9 +101,9 @@ impl FormattingData {
 
     pub fn write_to_string(self) -> String {
         match self.syntax {
-            OutputSyntax::C(_) => CFormatter::format(&self.bytes),
-            OutputSyntax::Cpp(_) => CppFormatter::format(&self.bytes),
-            OutputSyntax::Rust(_) => RustFormatter::format(&self.bytes),
+            OutputSyntax::C => CFormatter::format(&self.bytes),
+            OutputSyntax::Cpp => CppFormatter::format(&self.bytes),
+            OutputSyntax::Rust => RustFormatter::format(&self.bytes),
             _ => RawFormatter::format(&self.bytes),
         }
     }
