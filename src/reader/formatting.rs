@@ -51,17 +51,6 @@ pub enum OutputSyntax {
     Rust,
 }
 
-impl OutputSyntax {
-    pub fn from_string(target: &String) -> Self {
-        match target.to_lowercase().as_str() {
-            "cpp" | "c++" | "cxx" => OutputSyntax::Cpp,
-            "c" => OutputSyntax::C,
-            "rust" => OutputSyntax::Rust,
-            _ => OutputSyntax::Raw,
-        }
-    }
-}
-
 impl std::fmt::Display for OutputSyntax {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -69,6 +58,17 @@ impl std::fmt::Display for OutputSyntax {
             Self::Rust => write!(f, "Rust"),
             Self::Cpp => write!(f, "Cpp"),
             Self::C => write!(f, "C"),
+        }
+    }
+}
+
+impl From<String> for OutputSyntax {
+    fn from(value: String) -> Self {
+        match value.to_lowercase().as_str() {
+            "cpp" | "c++" | "cxx" => OutputSyntax::Cpp,
+            "c" => OutputSyntax::C,
+            "rust" => OutputSyntax::Rust,
+            _ => OutputSyntax::Raw,
         }
     }
 }

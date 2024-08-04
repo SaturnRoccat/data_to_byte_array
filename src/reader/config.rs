@@ -19,7 +19,7 @@ impl InitialConfig {
         let mut iter = args.into_iter().skip(1);
         Ok(Self {
             path_or_data: iter.next().unwrap(),
-            output_syntax: OutputSyntax::from_string(&iter.next().unwrap_or_default()),
+            output_syntax: iter.next().unwrap_or_default().into(),
         })
     }
 
