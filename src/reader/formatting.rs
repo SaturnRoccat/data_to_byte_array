@@ -8,8 +8,7 @@ pub struct CFormatter;
 pub struct RustFormatter;
 
 fn raw_format(vec: &Vec<u8>) -> String {
-    vec
-        .iter()
+    vec.iter()
         .map(|val| format!("{:#02x}", *val))
         .collect::<Vec<String>>()
         .join(", ")
@@ -23,7 +22,11 @@ impl ArrayFormatter for RawFormatter {
 
 impl ArrayFormatter for CppFormatter {
     fn format(vec: &Vec<u8>) -> String {
-        format!("std::array<uint8_t, {}> raw_hex = {{ {} }};", vec.len(), raw_format(vec))
+        format!(
+            "std::array<uint8_t, {}> raw_hex = {{ {} }};",
+            vec.len(),
+            raw_format(vec)
+        )
     }
 }
 
@@ -43,7 +46,7 @@ pub enum OutputSyntax {
     Raw(RawFormatter),
     Cpp(CppFormatter),
     C(CFormatter),
-    Rust(RustFormatter)
+    Rust(RustFormatter),
 }
 
 impl Default for OutputSyntax {
@@ -58,7 +61,7 @@ impl OutputSyntax {
             "cpp" | "c++" | "cxx" => OutputSyntax::Cpp(CppFormatter),
             "c" => OutputSyntax::C(CFormatter),
             "rust" => OutputSyntax::Rust(RustFormatter),
-            _ => OutputSyntax::Raw(RawFormatter)
+            _ => OutputSyntax::Raw(RawFormatter),
         }
     }
 }
@@ -85,21 +88,20 @@ impl std::fmt::Debug for OutputSyntax {
     }
 }
 
-
 #[derive(Debug)]
 pub struct FormattingData {
     bytes: Vec<u8>,
-    syntax: OutputSyntax
+    syntax: OutputSyntax,
 }
 
 impl FormattingData {
     pub fn new(bytes: Vec<u8>, syntax: OutputSyntax) -> Self {
-        FormattingData{
+        FormattingData {
             bytes: bytes,
-            syntax: syntax
+            syntax: syntax,
         }
     }
-    
+
     pub fn write_to_string(self) -> String {
         match self.syntax {
             OutputSyntax::C(_) => CFormatter::format(&self.bytes),
