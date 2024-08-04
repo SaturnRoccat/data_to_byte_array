@@ -51,7 +51,6 @@ pub enum OutputSyntax {
     Rust,
 }
 
-
 impl OutputSyntax {
     pub fn from_string(target: &String) -> Self {
         match target.to_lowercase().as_str() {

@@ -17,12 +17,10 @@ impl InitialConfig {
         }
 
         let mut iter = args.into_iter().skip(1);
-        let mut return_data = Self::default();
-        return_data.path_or_data = iter.next().unwrap();
-        if let Some(data) = iter.next() {
-            return_data.output_syntax = OutputSyntax::from_string(&data);
-        }
-        Ok(return_data)
+        Ok(Self {
+            path_or_data: iter.next().unwrap(),
+            output_syntax: OutputSyntax::from_string(&iter.next().unwrap_or_default()),
+        })
     }
 
     pub fn get_byte_data(path: String) -> Result<Vec<u8>, Box<dyn Error>> {
